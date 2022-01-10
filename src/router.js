@@ -17,7 +17,8 @@ export const router = new VueRouter({
     mode: 'history',
     routes: [
         { path: '/', name: "home", component: Home, meta: { rutaLibre: true } },
-        { path: "*", name: "error", component: Error },
+        { path: '*', redirect: '/404' },
+        { path: "/404", name: "error", component: Error },
         { path: '/login', name: "login", component: Login },
         { path: '/sign-up', name: "signup", component: SignUp },
         { path: '/dashboard', name: "dashboard", component: Dashboard, meta: { autentificado: true } },
