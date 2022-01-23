@@ -1,11 +1,21 @@
 <template>
   <div class="col-md-6 col-lg-4 offset-lg-4 offset-md-3 mt-4 pt-5">
     <h1 class="text-center">Iniciar Sesión</h1>
+
     <div class="bg-light p-5 border shadow rounded-3">
       <!-- <div class="alert alert-danger" role="alert" v-if="!enviado">
         Revisa tu bandeja de entrada para verificar tu correo electrónico
       </div> -->
       <span class="text-danger mb-3" v-if="mensaje">{{ mensaje }}</span>
+      <div class="row mb-2" @click="loginGoogle">
+        <div class="col-md-12">
+          <button class="w-100 btn btn-lg btn-google btn-block btn-outline">
+            <img src="https://img.icons8.com/color/32/000000/google-logo.png" />
+            Continuar con Google
+          </button>
+        </div>
+        <p class="mt-3 text-center text-secondary">O BIEN</p>
+      </div>
       <!-- Login Form -->
       <form @submit.prevent="login">
         <div class="mb-4">
@@ -42,7 +52,7 @@
 </template>
 
 <script>
-import { auth } from "../utils/firebase";
+import { auth, firebase } from "../utils/firebase";
 export default {
   name: "Login",
   data() {
@@ -70,21 +80,38 @@ export default {
           console.log(error.code), (this.mensaje = error.message);
         });
     },
+    loginGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+
+      auth
+        .signInWithPopup(provider)
+        .then(() => {
+          this.$router.replace("dashboard");
+        })
+        .catch((error) => {
+          console.log(error.code), (this.mensaje = error.message);
+        });
+    },
   },
 };
 </script>
 
 <style scoped>
-.btn {
+form .btn {
   background: #f9b864;
   border: 1px solid #f9b864;
   font-weight: bold;
 }
-.btn:hover {
+form .btn:hover {
   background: #f6f6f6;
   color: #f9b864;
   border: 1px solid #f9b864;
   transition: all 300ms ease-in-out;
   font-weight: bold;
+}
+.btn-google {
+  color: #545454;
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px 1px #ddd;
 }
 </style>

@@ -8,6 +8,15 @@
       </div> -->
       <span class="text-danger mb-3" v-if="mensaje">{{ mensaje }}</span>
       <!-- Signup Form -->
+      <div class="row mb-2" @click="loginGoogle">
+        <div class="col-md-12">
+          <button class="w-100 btn btn-lg btn-google btn-block btn-outline">
+            <img src="https://img.icons8.com/color/32/000000/google-logo.png" />
+            Continuar con Google
+          </button>
+        </div>
+        <p class="mt-3 text-center text-secondary">O BIEN</p>
+      </div>
       <form @submit.prevent="comparePasswords">
         <div class="mb-4">
           <input
@@ -38,11 +47,9 @@
         <p class="form-text text-end text-danger" v-if="!verification">
           Las contraseñas no coinciden
         </p>
-        <input
-          value="Crear cuenta"
-          type="submit"
-          class="btn btn-primary w-100 my-3 shadow"
-        />
+        <button type="submit" class="btn btn-primary w-100 my-3 shadow">
+          Inicia Sesión
+        </button>
 
         <p class="text-center m-0">
           Ya tengo cuenta,
@@ -55,7 +62,7 @@
 </template>
 
 <script>
-import { auth } from "../utils/firebase";
+import { auth, firebase } from "../utils/firebase";
 export default {
   name: "SignUp",
   data() {
@@ -97,21 +104,38 @@ export default {
           console.log(error.code), (this.mensaje = error.message);
         });
     },
+    loginGoogle() {
+      const provider = new firebase.auth.GoogleAuthProvider();
+
+      auth
+        .signInWithPopup(provider)
+        .then(() => {
+          this.$router.replace("dashboard");
+        })
+        .catch((error) => {
+          console.log(error.code), (this.mensaje = error.message);
+        });
+    },
   },
 };
 </script>
 
 <style scoped>
-.btn {
+form .btn {
   background: #f9b864;
   border: 1px solid #f9b864;
   font-weight: bold;
 }
-.btn:hover {
+form .btn:hover {
   background: #f6f6f6;
   color: #f9b864;
   border: 1px solid #f9b864;
   transition: all 300ms ease-in-out;
   font-weight: bold;
+}
+.btn-google {
+  color: #545454;
+  background-color: #ffffff;
+  box-shadow: 0 1px 2px 1px #ddd;
 }
 </style>
