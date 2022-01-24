@@ -76,7 +76,7 @@
           Las contraseñas no coinciden
         </p>
         <button type="submit" class="btn btn-primary w-100 my-3 shadow">
-          Inicia Sesión
+          Crear cuenta
         </button>
 
         <p class="text-center m-0">
