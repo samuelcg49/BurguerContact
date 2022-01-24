@@ -7,16 +7,44 @@
         Revisa tu bandeja de entrada para verificar tu correo electrónico
       </div> -->
       <span class="text-danger mb-3" v-if="mensaje">{{ mensaje }}</span>
-      <!-- Signup Form -->
-      <div class="row mb-2" @click="loginGoogle">
-        <div class="col-md-12">
-          <button class="w-100 btn btn-lg btn-google btn-block btn-outline">
-            <img src="https://img.icons8.com/color/32/000000/google-logo.png" />
-            Continuar con Google
-          </button>
+      <!-- Social Media login -->
+      <div>
+        <div
+          @click="loginSocialMedia(1)"
+          class="w-100 btn btn-lg btn-social btn-block btn-outline"
+        >
+          <img
+            src="https://aid-frontend.prod.atl-paas.net/atlassian-id/front-end/5.0.293/static/media/google-logo.e086107b.svg"
+            class="ms-1"
+          />
+          <span class="ms-5 me-5"> Registrarse con Google </span>
         </div>
-        <p class="mt-3 text-center text-secondary">O BIEN</p>
+
+        <div
+          @click="loginSocialMedia(2)"
+          class="mt-2 w-100 btn btn-lg btn-social btn-block btn-outline"
+        >
+          <img
+            src="https://aid-frontend.prod.atl-paas.net/atlassian-id/front-end/5.0.293/static/media/microsoft-logo.42b61fa1.svg"
+            class=""
+          />
+          <span class="ms-5 me-4"> Registrarse con Microsoft </span>
+        </div>
+
+        <div
+          @click="loginSocialMedia(3)"
+          class="mt-2 w-100 btn btn-lg btn-social btn-block btn-outline"
+        >
+          <img
+            src="https://cdn-icons-png.flaticon.com/512/25/25231.png"
+            class="me-5"
+          />
+          <span class="me-5 pe-1"> Registrarse con Github </span>
+        </div>
       </div>
+      <p class="mb-3 mt-4 text-center text-secondary">O BIEN</p>
+
+      <!-- Signup Form -->
       <form @submit.prevent="comparePasswords">
         <div class="mb-4">
           <input
@@ -104,11 +132,23 @@ export default {
           console.log(error.code), (this.mensaje = error.message);
         });
     },
-    loginGoogle() {
-      const provider = new firebase.auth.GoogleAuthProvider();
+    loginSocialMedia(id) {
+      let provider = "";
+
+      switch (id) {
+        case 1:
+          provider = new firebase.auth.GoogleAuthProvider();
+          break;
+        case 2:
+          provider = new firebase.auth.OAuthProvider("microsoft.com");
+          break;
+        case 3:
+          provider = new firebase.auth.GithubAuthProvider();
+          break;
+      }
 
       auth
-        .signInWithPopup(provider)
+        .signInWithRedirect(provider)
         .then(() => {
           this.$router.replace("dashboard");
         })
@@ -133,9 +173,21 @@ form .btn:hover {
   transition: all 300ms ease-in-out;
   font-weight: bold;
 }
-.btn-google {
+.btn-social {
   color: #545454;
   background-color: #ffffff;
   box-shadow: 0 1px 2px 1px #ddd;
+}
+
+img,
+svg {
+  width: 20px;
+  margin-bottom: 5px;
+}
+
+span {
+  font-size: 17px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
 }
 </style>
