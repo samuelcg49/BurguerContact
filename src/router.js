@@ -32,8 +32,11 @@ router.beforeEach((to, from, next) => {
     if (auth.currentUser) { //Si hay un usuario logueado, guardamos el valor de su verificacion: "true" ó "false"
         var usuario = auth.currentUser.emailVerified;
     }
+
     let autentificacion = to.matched.some(record => record.meta.autentificado)
+
     let rutaLibre = to.matched.some(record => record.meta.rutaLibre)
+
     if (rutaLibre) {
         next()
     } else if (autentificacion && !usuario) {
